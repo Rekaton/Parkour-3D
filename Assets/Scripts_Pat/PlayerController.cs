@@ -1,12 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
-    [Header("Movement")]
-    private float speed = 6f;
-    public float walkSpeed;
-    public float sprintSpeed;
+[Header("Movement")]
+    public float speed = 6f;
+    //public float walkSpeed;
+    //public float sprintSpeed;
 
     public Transform orientation;
 
@@ -92,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void SetHandler()
     {
-        if(isGrounded && Input.GetKeyDown(jumpKey))
+
     }
     private void MovePlayer()
     {
