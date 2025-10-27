@@ -6,8 +6,23 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scrips/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scrips/Scenes/kasper.unity
+    guid: 48f745ca936b30842b623663825a2877
+  - enabled: 1
+    path: Assets/Scrips/Scenes/main_menu.unity
+    guid: 0d11b43891a7b7b48ba1bb387818da32
+  - enabled: 1
+    path: Assets/Scrips/Scenes/gamescene.unity
+    guid: f7d129804c2f23f47a8f4be57eb0420c
+  - enabled: 1
+    path: Assets/Scrips/Scenes/Options.unity
+    guid: e4dd7a6e5d34e7d4bbdf71a1f59695f3
+  - enabled: 1
+    path: Assets/Scrips/Scenes/Options 1.unity
+    guid: 64f44b5142cfb2a4b8febe9cdf13ac2e
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
