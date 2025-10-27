@@ -26,16 +26,13 @@ public class EnemyAI : MonoBehaviour
 
             // Rotate smoothly toward player
             Vector3 direction = (player.position - transform.position).normalized;
-            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * lookSpeed);
         }
 
         if (distance <= catchDistance)
         {
             // "Catch" player
             Debug.Log("Player caught!");
-            // You can trigger a respawn, game over, or damage effect here
+            // respawn, game over, or damage effect here
         }
     }
 }
-
