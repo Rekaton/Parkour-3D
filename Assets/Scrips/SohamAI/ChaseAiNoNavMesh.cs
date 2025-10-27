@@ -46,7 +46,17 @@ public class ChaseAiNoNavMesh : MonoBehaviour
         }
 
         JumpWhenNeeded();
+        MoveTowardsPlayer();
 
+        if (!canJump)
+        {
+            jumpTimer -= Time.deltaTime;
+            if (jumpTimer <= 0f)
+            {
+                canJump = true;
+                Debug.Log("Jump ready again!");
+            }
+        }
     }
 
     public void JumpWhenNeeded()
@@ -63,6 +73,14 @@ public class ChaseAiNoNavMesh : MonoBehaviour
                 rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
             }
         }
+    }
+    void MoveTowardsPlayer()
+    {
+        Vector3 direction = (player.position - transform.position).normalized;
+        Quaternion targetRot = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 5f);
+
+        rb.MovePosition(transform.position + transform.forward * speed * Time.deltaTime);
     }
     private void Jump()
     {
