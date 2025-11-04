@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ChaseAiNoNavMesh : MonoBehaviour
@@ -13,10 +14,15 @@ public class ChaseAiNoNavMesh : MonoBehaviour
     public float jumpCooldown;
     public LayerMask groundMask;
 
+    [Header("JumpVariables")]
+    public float rangeFromWall = 5f;
+    public float jumpSideForce;
+
     private Rigidbody rb;                  
-    private bool isGrounded;               // Whether the AI is touching the ground
+    public bool isGrounded;               // Whether the AI is touching the ground
     private bool canJump = true; // flag that tracks if AI can jump
     private float jumpTimer;
+
 
 
     void Start()
@@ -28,25 +34,14 @@ public class ChaseAiNoNavMesh : MonoBehaviour
     {
         // Sends a ray straight down from the AI
         isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundMask);
-
-        // Calculate direction to player
-        Vector3 direction = (player.position - transform.position).normalized;
-        // Move in that direction
-        rb.MovePosition(transform.position + direction * speed * Time.deltaTime);
-
-        // We shoot a ray forward from the AI's position
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, 1.5f))
+        JumpWhenNeeded();
+        if (isGrounded)
         {
-            // If it hits something tagged "Obstacle" and the AI is on the ground, jump
-            if (isGrounded && hit.collider.CompareTag("Obstacle"))
-            {
-                Debug.Log("Found = jumping");
-                rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
-            }
+            MoveTowardsPlayer();
+            //ChasePlayer();
         }
 
-        JumpWhenNeeded();
-        MoveTowardsPlayer();
+        //MoveTowardsPlayer();
 
         if (!canJump)
         {
@@ -59,21 +54,31 @@ public class ChaseAiNoNavMesh : MonoBehaviour
         }
     }
 
+    private void ChasePlayer()
+    {
+        // Calculate direction to player
+        Vector3 direction = (player.position - transform.position).normalized;
+        // Move in that direction
+        rb.MovePosition(transform.position + direction * speed * Time.deltaTime);
+    }
+
+
     public void JumpWhenNeeded()
     {
-        // Shoot a ray forward to detect obstacles
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, 1.5f))
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.forward, out hit, rangeFromWall))
         {
-            Debug.Log("Raycast hit: " + hit.collider.name + " | Tag: " + hit.collider.tag);
-
-            // Check if it's an obstacle and we're grounded
+            
             if (isGrounded && hit.collider.CompareTag("Obstacle"))
             {
                 Debug.Log("Found obstacle = jumping!");
-                rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+                rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                rb.AddForce(Vector3.forward * jumpSideForce, ForceMode.Impulse);
             }
         }
     }
+
+   
     void MoveTowardsPlayer()
     {
         Vector3 direction = (player.position - transform.position).normalized;
@@ -82,11 +87,11 @@ public class ChaseAiNoNavMesh : MonoBehaviour
 
         rb.MovePosition(transform.position + transform.forward * speed * Time.deltaTime);
     }
-    private void Jump()
-    {
-        canJump = false;                     // Disable further jumps
-        jumpTimer = jumpCooldown;            // Reset timer
-        rb.AddForce((transform.forward + Vector3.up) * jumpForce, ForceMode.VelocityChange);
-    }
+    //private void Jump()
+    //{
+    //    canJump = false;                     // Disable further jumps
+    //    jumpTimer = jumpCooldown;            // Reset timer
+    //    rb.AddForce((transform.forward + Vector3.up) * jumpForce, ForceMode.VelocityChange);
+    //}
 
 }
