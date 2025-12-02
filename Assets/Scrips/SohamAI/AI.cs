@@ -4,7 +4,6 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     public Transform player;          // Reference to the player
-    public float chaseRange = 10f;    // How far the AI can "see" the player
     public float catchDistance = 1.5f; // How close before "catching" the player
     public float lookSpeed = 5f;      // How quickly it turns to face the player
 
@@ -18,14 +17,9 @@ public class EnemyAI : MonoBehaviour
     void Update()
     {
         float distance = Vector3.Distance(player.position, transform.position);
-
-        if (distance <= chaseRange)
+        if (player != null)
         {
-            // Follow player
             agent.SetDestination(player.position);
-
-            // Rotate smoothly toward player
-            Vector3 direction = (player.position - transform.position).normalized;
         }
 
         if (distance <= catchDistance)
