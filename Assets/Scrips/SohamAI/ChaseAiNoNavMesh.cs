@@ -18,7 +18,7 @@ public class ChaseAiNoNavMesh : MonoBehaviour
     public float rangeFromWall = 5f;
     public float jumpSideForce;
 
-    private Rigidbody rb;                  
+    private Rigidbody rb;
     public bool isGrounded;               // Whether the AI is touching the ground
     private bool canJump = true; // flag that tracks if AI can jump
     private float jumpTimer;
@@ -68,7 +68,7 @@ public class ChaseAiNoNavMesh : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.forward, out hit, rangeFromWall))
         {
-            
+
             if (isGrounded && hit.collider.CompareTag("Obstacle"))
             {
                 Debug.Log("Found obstacle = jumping!");
@@ -78,20 +78,31 @@ public class ChaseAiNoNavMesh : MonoBehaviour
         }
     }
 
-   
+
     void MoveTowardsPlayer()
     {
         Vector3 direction = (player.position - transform.position).normalized;
+
+        // Lag en rotasjon mot spilleren
         Quaternion targetRot = Quaternion.LookRotation(direction);
+
+        // Lås rotasjonen til kun Y-aksen
+        Vector3 euler = targetRot.eulerAngles;
+        euler.x = 0f;
+        euler.z = 0f;
+        targetRot = Quaternion.Euler(euler);
+
+        // Slerp som før
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 5f);
 
+        // Bevegelse
         rb.MovePosition(transform.position + transform.forward * speed * Time.deltaTime);
-    }
-    //private void Jump()
-    //{
-    //    canJump = false;                     // Disable further jumps
-    //    jumpTimer = jumpCooldown;            // Reset timer
-    //    rb.AddForce((transform.forward + Vector3.up) * jumpForce, ForceMode.VelocityChange);
-    //}
+        //private void Jump()
+        //{
+        //    canJump = false;                     // Disable further jumps
+        //    jumpTimer = jumpCooldown;            // Reset timer
+        //    rb.AddForce((transform.forward + Vector3.up) * jumpForce, ForceMode.VelocityChange);
+        //}
 
+    }
 }
